@@ -37,8 +37,8 @@
  *         Olaf Landsiedel <olafl@chalmers.se>
  */
 
-#ifndef _QUORUM_H_
-#define _QUORUM_H_
+#ifndef _MAX_H_
+#define _MAX_H_
 
 #include "chaos.h"
 #include "testbed.h"
