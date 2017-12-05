@@ -92,7 +92,7 @@ process(uint16_t round_count, uint16_t slot_count, chaos_state_t current_state, 
  
  }
  
- int max_round_begin(const uint16_t round_number, const uint8_t app_id, uint16_t* value, uint8_t** final_flags, uint8_t* phase)
+ int max_round_begin(const uint8_t app_id, uint16_t* value, uint8_t** final_flags, uint8_t* phase)
 
 {
 
