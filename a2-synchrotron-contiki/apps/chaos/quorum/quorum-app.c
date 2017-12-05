@@ -8,7 +8,8 @@
 
 static uint16_t value = 0;
 static uint8_t* flags;
-static uint16_t complete = 0, phase = 0;
+static uint16_t complete = 0;
+static uint8_t phase = 0;
 static uint16_t off_slot;
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
