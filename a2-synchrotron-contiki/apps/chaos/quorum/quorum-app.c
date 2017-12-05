@@ -8,7 +8,7 @@
 
 static uint16_t value = 0;
 static uint8_t* flags;
-static uint16_t complete = 0;
+static uint16_t complete = 0 , phase = 0;
 static uint16_t off_slot;
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
@@ -53,7 +53,7 @@ PROCESS_END();
 
 static void round_begin(const uint8_t id){
   value = 1;
-   complete = max_round_begin(id, &value, &flags);
+   complete = max_round_begin(id, &value, &flags , &phase);
   off_slot = quorum_get_off_slot();
   process_poll(&chaos_quorum_app_process);
 }
