@@ -1,1 +1,1 @@
-CONTIKI_SOURCEFILES += quorum.c
+CONTIKI_SOURCEFILES += quorum_1.c
