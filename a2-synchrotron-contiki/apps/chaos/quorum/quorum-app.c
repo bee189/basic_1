@@ -49,7 +49,7 @@ PROCESS_END();
 
 static void round_begin(const uint16_t round_count, const uint8_t id){
   value = 1;
-   complete = max_round_begin(id, &value, &flags, &phase);
+   complete = quorum_round_begin(id, &value, &flags, &phase);
   off_slot = max_get_off_slot();
   process_poll(&chaos_quorum_app_process);
 }
