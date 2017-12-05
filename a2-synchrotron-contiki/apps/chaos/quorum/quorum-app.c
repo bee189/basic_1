@@ -8,7 +8,7 @@
 
 static uint16_t value = 0;
 static uint8_t* flags;
-static uint16_t complete = 0 , phase = 0;
+static uint16_t complete = 0, phase = 0;
 static uint16_t off_slot;
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
@@ -34,16 +34,11 @@ PROCESS_BEGIN();
 while( 1 ){
 		PROCESS_YIELD();
 		if(chaos_has_node_index){
-    
+        
 
-      if(complete == 0){
-        int i;
-        for( i=0; i<max_get_flags_length(); i++ ){
-          printf(" %02x", flags[i]);
-        }
-        printf("\n");
-      }
-
+     
+}
+}
 
 PROCESS_END();
 
@@ -51,9 +46,9 @@ PROCESS_END();
 
 }
 
-static void round_begin(const uint8_t id){
+static void round_begin(const uint16_t round_count, const uint8_t id){
   value = 1;
-   complete = max_round_begin(id, &value, &flags , &phase);
-  off_slot = quorum_get_off_slot();
+   complete = max_round_begin(id, &value, &flags, &phase);
+  off_slot = max_get_off_slot();
   process_poll(&chaos_quorum_app_process);
 }
