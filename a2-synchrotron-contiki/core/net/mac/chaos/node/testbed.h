@@ -126,7 +126,8 @@
   #endif
 
   #if !defined(CHAOS_NODES) && !NETSTACK_CONF_WITH_CHAOS_NODE_DYNAMIC
-  #define CHAOS_NODES (sizeof(mapping)/sizeof(mapping[0]))
+  //#define CHAOS_NODES (sizeof(mapping)/sizeof(mapping[0]))
+   #define CHAOS_NODES (6)
   #endif
 
 #else
