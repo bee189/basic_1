@@ -1,3 +1,4 @@
+CONTIKI_SOURCEFILES += quorum.c
 TARGET ?= sky
 
 CONTIKI_PROJECT = quorum-app
@@ -13,6 +14,7 @@ else
 endif
 
 CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"
+CONTIKI_SOURCEFILES += quorum.c
 
 CONTIKI = ../../..
 include $(CONTIKI)/Makefile.include
