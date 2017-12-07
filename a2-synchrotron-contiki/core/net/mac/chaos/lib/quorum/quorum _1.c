@@ -21,7 +21,7 @@
 #define ENABLE_COOJA_DEBUG COOJA
 
 #include "dev/cooja-debug.h"
-
+ 
 
 
 #define FLAGS_LEN_X(X)   (((X) >> 3) + (((X) & 7) ? 1 : 0))
@@ -54,8 +54,9 @@
 
 typedef struct __attribute__((packed)) quorum_t_struct {
 
-  uint16_t quorum;
-
+  uint16_t write_value; 
+  uint16_t seq_nr;
+  uint8_t msg_type;
   uint8_t flags[];
 
 } quorum_t;
@@ -64,8 +65,9 @@ typedef struct __attribute__((packed)) quorum_t_struct {
 
 typedef struct __attribute__((packed)) quorum_t_local_struct {
 
-  quorum_t quorum;
-
+  quorum_t quorum_value;
+  uint8_t phase;
+  uint16_t local_seq_nr;
   uint8_t flags[FLAGS_ESTIMATE];
 
 } quorum_t_local;
@@ -88,22 +90,71 @@ process(uint16_t round_count, uint16_t slot_count, chaos_state_t current_state, 
 
   quorum_t* rx_quorum = (quorum_t*)rx_payload;
   
+  chaos_state_t next_state;  
+    
+    
+      if (IS_INITIATOR() && current_state == CHAOS_INIT){
+    quorum_local.quorum_value.write_value = quorum_local.quorum_value.write_value + 1 ;
+    next_state = CHAOS_TX;
+     rx =0;
+
+    }
+  else {
+
+        next_state = CHAOS_RX;
+
+        }
+
+
+     if ( current_state == CHAOS_TX && !chaos_txrx_success ){
+        next_state == CHAOS_TX;
+        }
+      else if ( rx== 1 && current_state == CHAOS_RX && chaos_txrx_success ){
+
+        quorum_local.quorum_value.write_value = rx_quorum->write_value;
+
+        }
+
+       if (next_state == CHAOS_TX){
+
+                tx_quorum->write_value =  quorum_local.quorum_value.write_value;
+                }
+
+    *app_flags = NULL;
+   return next_state;
+
+
  
  
  }
  
- int max_round_begin(const uint8_t app_id, uint16_t* value, uint8_t** final_flags, uint8_t* phase)
+ int quorum_round_begin(const uint16_t round_number, const uint8_t app_id, uint16_t* value, uint8_t** final_flags, uint8_t* phase)
 
 {
 
 
 COOJA_DEBUG_STR("value");
+   
+   quorum_local.quorum_value.write_value = *value;
+   
+   chaos_round(round_number, app_id, (const uint8_t const*)&quorum_local.quorum_value.write_value, sizeof(quorum_t) + quorum_get_flags_length(), MAX_SLOT_LEN_DCO, MAX_ROUND_MAX_SLOTS, quorum_get_flags_length(), process);
+
+    *value = quorum_local.quorum_value.write_value;
+   
 
 
 }
 
+int quorum_is_pending(const uint16_t round_count){
 
+  return 1;
 
+}
+//uint16_t quorum_get_off_slot(){
+
+  //return off_slot;
+
+//}
 
 
 
