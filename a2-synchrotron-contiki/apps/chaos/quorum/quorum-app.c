@@ -14,7 +14,7 @@ static uint16_t off_slot;
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
 
-CHAOS_APP(chaos_quorum_app, MAX_SLOT_LEN, MAX_ROUND_MAX_SLOTS, 1, max_is_pending, round_begin);
+CHAOS_APP(chaos_quorum_app, MAX_SLOT_LEN, MAX_ROUND_MAX_SLOTS, 1, quorum_is_pending, round_begin);
 #if NETSTACK_CONF_WITH_CHAOS_NODE_DYNAMIC
 #include "join.h"
 CHAOS_APPS(&join, &chaos_quorum_app);
@@ -35,7 +35,8 @@ PROCESS_BEGIN();
 while( 1 ){
 		PROCESS_YIELD();
 		if(chaos_has_node_index){
-        
+			printf("value is...%u and id is %u", value, node_id);
+              
 
      
 }
@@ -49,7 +50,7 @@ PROCESS_END();
 
 static void round_begin(const uint16_t round_count, const uint8_t id){
   value = 1;
-   complete = quorum_round_begin(id, &value, &flags, &phase);
-  off_slot = max_get_off_slot();
+   complete = quorum_round_begin( round_count, id, &value, &flags, &phase);
+  off_slot = quorum_get_off_slot();
   process_poll(&chaos_quorum_app_process);
 }
