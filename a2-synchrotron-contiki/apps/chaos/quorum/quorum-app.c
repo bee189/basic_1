@@ -12,6 +12,8 @@ static uint16_t complete = 0;
 static uint8_t phase = 0;
 static uint16_t off_slot;
 
+
+
 static void round_begin(const uint16_t round_count, const uint8_t id);
 
 CHAOS_APP(chaos_quorum_app, MAX_SLOT_LEN, MAX_ROUND_MAX_SLOTS, 1, quorum_is_pending, round_begin);
