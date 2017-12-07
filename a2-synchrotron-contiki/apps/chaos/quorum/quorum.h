@@ -44,6 +44,15 @@
 #include "testbed.h"
 #include "chaos-config.h"
 
+
+enum {
+    WRITE_PROPOSE = 0
+};
+#define PHASE_TO_STR(phase) (\
+
+  (phase == WRITE_PROPOSE) ? ("WRITE_PROPOSE") : \
+  )
+
 #define MAX_SLOT_LEN          (4*(RTIMER_SECOND/1000)+0*(RTIMER_SECOND/1000)/4)    //1 rtimer tick == 2*31.52 us
 
 #ifndef MAX_ROUND_MAX_SLOTS
