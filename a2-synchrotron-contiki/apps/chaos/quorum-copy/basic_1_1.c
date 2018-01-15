@@ -167,7 +167,7 @@ p = &flag_sum; */
             
             a = bin_count(flag_sum);
             if(a > (CHAOS_NODES/2)){
-             printf(":set bits %u", a );            
+             printf(":Round%u. set bits %u. ", round_count, a );            
              //quorum_local.phase = CAN_WRITE;
              next_state = CHAOS_OFF;
 
@@ -293,7 +293,7 @@ p = &flag_sum; */
 		//current_state == CHAOS_TX && txrx_count || slot_count >= MAX_ROUND_MAX_SLOTS - 1
 		
      if(current_state == CHAOS_TX && txrx_count > 9){
-		  printf(":set bits %u", a );
+		  printf(":Round%u. set bits %u. ", round_count, a);
         next_state = CHAOS_OFF;
         txrx_count = 0;
 
@@ -302,7 +302,7 @@ p = &flag_sum; */
 
     //*app_flags = quorum_local.flags;
     //memcpy(quorum_local.quorum_value.flags, tx_quorum->flags, FLAGS_LEN);
-    if((next_state == CHAOS_TX)|| (current_state == CHAOS_RX && chaos_txrx_success)){
+    if((next_state == CHAOS_TX)|| (current_state == CHAOS_RX && chaos_txrx_success)||(next_state == CHAOS_OFF) ){
     flag_sum_1 = 0;
         for( i = 0; i < FLAGS_LEN; i++){
             flag_sum_1 += tx_quorum->flags[i];
@@ -310,18 +310,19 @@ p = &flag_sum; */
                     }
 			/* if(next_state == CHAOS_OFF){
 			a = bin_count(flag_sum_1);
-		    printf(":set bits %u", a );
+		    printf(":For round%u :set bits %u", round_count, a );
 			} */
 			flag_stack(flag_sum_1);
     
     }
 	
-	int end = ((next_state == CHAOS_OFF) || (slot_count >= MAX_ROUND_MAX_SLOTS - 2));
+	 *app_flags = tx_quorum->flags;
+	
+	int end = (next_state == CHAOS_OFF) || (slot_count >= MAX_ROUND_MAX_SLOTS - 2);
 	if(end) {
 		quorum_local.quorum_value.write_value = tx_quorum->write_value;
         quorum_local.local_seq_nr = tx_quorum->seq_nr;
 		quorum_flags = tx_quorum->flags;
-		
 		
 	}
 	
@@ -338,7 +339,7 @@ p = &flag_sum; */
                  
 
    //*app_flags = (current_state == CHAOS_TX)? tx_quorum->flags : rx_quorum->flags;
-  *app_flags = tx_quorum->flags;
+ 
   
    return next_state;
 
@@ -372,6 +373,8 @@ memcpy(quorum_local.quorum_value.flags, quorum_flags, quorum_get_flags_length())
 *value = quorum_local.quorum_value.write_value;
 *time_stamp = quorum_local.local_seq_nr;
 *final_flags = quorum_local.quorum_value.flags;
+return j;
+
 //local_round = round_number;
 
 }
