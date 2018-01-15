@@ -11,7 +11,8 @@ static uint8_t* flags;
 static uint16_t complete = 0;
 static uint8_t phase = 0;
 static uint16_t off_slot;
-uint16_t time_stamp;
+static uint16_t time_stamp =0;
+static uint16_t round_count_local;
 static void round_begin(const uint16_t round_count, const uint8_t id);
 
 CHAOS_APP(chaos_quorum_app, MAX_SLOT_LEN, MAX_ROUND_MAX_SLOTS, 1, quorum_is_pending, round_begin);
@@ -35,11 +36,23 @@ PROCESS_BEGIN();
 while( 1 ){
                 PROCESS_YIELD();
                 if(chaos_has_node_index){
-              printf("value is :%u and id: %u time_stamp: %u", value, node_id, time_stamp);
 
-     
+				
+                 printf("Round:%u[value:%u Seq.nr:%u flags:" ,round_count_local, value, time_stamp);
+                 int i;
+                   
+                    for( i=0; i<quorum_get_flags_length(); i++ ){
+						
+                         printf("%02x", flags[i]);
+
+                         }  
+						 printf("]");
+				
 }
+
 }
+
+
 
 PROCESS_END();
 }
@@ -47,6 +60,7 @@ PROCESS_END();
 static void round_begin(const uint16_t round_count, const uint8_t id){
  // value = 1;
    complete = quorum_round_begin(round_count, id, &value, &flags, &phase, &time_stamp);
+   round_count_local = round_count;
  // off_slot = quorum_get_off_slot();
   process_poll(&chaos_quorum_app_process);
 }
