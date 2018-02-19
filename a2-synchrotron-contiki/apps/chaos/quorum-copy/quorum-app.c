@@ -10,6 +10,7 @@ static uint16_t value = 0;
 static uint8_t* flags;
 static uint16_t complete = 0;
 static uint8_t phase = 0;
+static uint8_t header= 0;
 static uint16_t off_slot;
 static uint16_t time_stamp =0;
 static uint16_t round_count_local;
@@ -37,7 +38,16 @@ while( 1 ){
                 PROCESS_YIELD();
                 if(chaos_has_node_index){
 
-				
+				if(header == READ_HEADER){
+					printf("reading ");
+					
+				}
+				else if(header == WRITE_HEADER){
+					printf("writing ");
+				}
+				else if(header == WRITE_QUERY_HEADER){
+					printf("write query ");
+				}
                  printf("Round:%u[value:%u Seq.nr:%u flags:" ,round_count_local, value, time_stamp);
                  int i;
                    
@@ -59,7 +69,7 @@ PROCESS_END();
 
 static void round_begin(const uint16_t round_count, const uint8_t id){
  // value = 1;
-   complete = quorum_round_begin(round_count, id, &value, &flags, &phase, &time_stamp);
+   complete = quorum_round_begin(round_count, id, &value, &flags, &phase, &time_stamp, &header);
    round_count_local = round_count;
  // off_slot = quorum_get_off_slot();
   process_poll(&chaos_quorum_app_process);
